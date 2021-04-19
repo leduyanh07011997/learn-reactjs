@@ -1,22 +1,22 @@
 import React from 'react';
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { NavLink, Route, Switch } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AlbumFeature from './features/Album';
+import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
+import Header from 'components/Header'
 
 function App() {
   return (
     <div className="App">
-      Header
-            <p><NavLink to="/todos" activeClassName="active-manu">Todos</NavLink></p>
-            <p><NavLink to="/albums" activeClassName="active">Albums</NavLink></p>
-            <Switch>
-                     <Route path="/todos" component={ TodoFeature }></Route>
-                     <Route path="/albums" component={ AlbumFeature }></Route>
+      <Header/>
+        <Switch>
+          <Route path="/" component={ CounterFeature } exact></Route>
+          <Route path="/todos" component={ TodoFeature }></Route>
+          <Route path="/albums" component={ AlbumFeature }></Route>
 
-                     <Route component={ NotFound }></Route>
-            </Switch>
-      Footer
+          <Route component={ NotFound }></Route>
+        </Switch>
     </div>
   );
 }
