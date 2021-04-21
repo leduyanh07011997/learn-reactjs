@@ -1,14 +1,34 @@
-import React from 'react';
+
+import { unwrapResult } from '@reduxjs/toolkit';
+import { register } from 'features/Auth/userSlice';
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import RegisterForm from '../RegisterForm';
 
 Register.propTypes = {
-    
+   closeDialog: PropTypes.func, 
 };
 
 function Register(props) {
-    const handleSubmit = (values) => {
-        console.log('Form Submit: ',values)
+    const {enqueueSnackbar} = useSnackbar()
+    const dispatch = useDispatch()
+    const handleSubmit = async (values) => {
+        try {
+            values.username = values.email
+            const action = register(values)
+            const resultAction = await dispatch(action)
+            unwrapResult(resultAction)
+
+            const {closeDialog} = props
+            if(closeDialog) {
+                closeDialog()
+            } 
+            enqueueSnackbar('Register successfully!!!',{variant: 'success'})
+        } catch (error) {
+            console.log('Failed to register: ', error)
+        }
     }
     return (
         <div>

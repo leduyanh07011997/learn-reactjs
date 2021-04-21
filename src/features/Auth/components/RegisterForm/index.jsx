@@ -4,7 +4,7 @@ import InputField from '../../../../components/form-control/InputField';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Avatar, Button, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Button, LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import PasswordField from 'components/form-control/PasswordField';
 
@@ -12,20 +12,23 @@ const useStyles = makeStyles(theme => ({
     root: {
         paddingTop: theme.spacing(4),
     },
-
     avatar: {
         margin: '0 auto',
         backgroundColor: theme.palette.secondary.main,
     },
-
     title: {
         textAlign: 'center',
         margin: theme.spacing(2,0,3,0),
     },
-
     submit: {
         margin: theme.spacing(2,0,3),
     },
+    progress: {
+        position: 'absolute',
+        top: theme.spacing(1),
+        left: 0,
+        right: 0
+    }
 }));
 
 
@@ -48,6 +51,9 @@ function RegisterForm(props) {
         password: yup.string()
             .required('Please enter your password.')
             .min(6,'Please enter at least six characters.'),
+        retypePassword: yup.string()
+            .required('Please retype your password.')
+            .oneOf([yup.ref('password')],'Password does not match.')
       });
     const form = useForm({
         defaultValues: {
@@ -58,15 +64,19 @@ function RegisterForm(props) {
         },
         resolver: yupResolver(schema)
     })
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         const { onSubmit } = props;
         if (onSubmit) {
-          onSubmit(values);  
+          await onSubmit(values);  
         }
         form.reset();
     }
+
+    const {isSubmitting} = form.formState
+
     return (
         <div className={classes.root}>
+            {isSubmitting && <LinearProgress className={classes.progress} />}
             <Avatar className={classes.avatar}>
                 <LockOutlined/>
             </Avatar>
@@ -80,7 +90,7 @@ function RegisterForm(props) {
                 <PasswordField name="password" label="Password" form={form}></PasswordField>
                 <PasswordField name="retypePassword" label="Retype Password" form={form}></PasswordField>
 
-                <Button type="submit" className={classes.submit} variant="contained" color="primary" fullWidth>
+                <Button disabled={isSubmitting} type="submit" className={classes.submit} variant="contained" color="primary" fullWidth>
                     Create an account 
                 </Button>
             </form>

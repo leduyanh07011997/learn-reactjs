@@ -5,8 +5,11 @@ import AlbumFeature from './features/Album';
 import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
 import Header from 'components/Header'
+import { Button } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 function App() {
+
   return (
     <div className="App">
       <Header/>
