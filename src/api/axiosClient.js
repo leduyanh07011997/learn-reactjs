@@ -8,7 +8,7 @@ const axiosClient = axios.create({
 });
 // interceptors
 // Add a request interceptor
-axios.interceptors.request.use(
+axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
     return config;
@@ -18,7 +18,7 @@ axios.interceptors.request.use(
   });
 
 // Add a response interceptor
-axios.interceptors.response.use(
+axiosClient.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
@@ -27,17 +27,18 @@ axios.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    console.log('ERROR RESPONSE: ', error.response);
+    
     const { config, status, data } = error.response
-    if(config.url === '/auth/local/register' && status === 400) {
+    const URLs = ['/auth/local/register','/auth/local']
+    if(URLs.includes(config.url) && status === 400) {
       const errorList = data.data || []
       const firstError = errorList.length > 0 ? errorList[0] : {}
-      const messageList = firstError.message || []
+      const messageList = firstError.messages || []
       const firstMessage = messageList.length > 0 ? messageList[0] : {}
 
       throw new Error(firstMessage.message)
     }
-    return Promise.reject('123');
+    return Promise.reject(error);
   });
 
 export default axiosClient

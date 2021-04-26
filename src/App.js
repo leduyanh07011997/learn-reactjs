@@ -1,12 +1,11 @@
+import Header from 'components/Header';
+import ProductFeature from 'features/product';
 import React from 'react';
-import { NavLink, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AlbumFeature from './features/Album';
 import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
-import Header from 'components/Header'
-import { Button } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
 
 function App() {
 
@@ -17,6 +16,7 @@ function App() {
           <Route path="/" component={ CounterFeature } exact></Route>
           <Route path="/todos" component={ TodoFeature }></Route>
           <Route path="/albums" component={ AlbumFeature }></Route>
+          <Route path="/products" component={ ProductFeature }></Route>
 
           <Route component={ NotFound }></Route>
         </Switch>
