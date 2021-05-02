@@ -82,7 +82,7 @@ export default function Header() {
           </CodeIcon>
           <Typography variant="h6" className={classes.title}>
             <Link className={classes.link} to="/">
-                Book Store
+                EZ Shop
             </Link>
           </Typography>
           <NavLink className={classes.link} to="/todos">

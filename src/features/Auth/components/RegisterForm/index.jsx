@@ -62,6 +62,7 @@ function RegisterForm(props) {
             password: '',
             retypePassword: '',
         },
+        reValidateMode: 'onSubmit',
         resolver: yupResolver(schema)
     })
     const handleSubmit = async (values) => {

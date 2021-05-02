@@ -13,22 +13,33 @@ InputField.propTypes = {
 
 function InputField(props) {
     const {form, name, label, disable} = props;
-    const {errors} = form;
-    const hasError = errors[name];
+    const {control} = form;
+    console.log(control)
 
     return (
         <Controller
             name={name}
-            control={form.control}
-            as={TextField}
-            margin="normal"
-            variant="outlined"
-            fullWidth
-            label={label}
-            disable={disable}
+            control={control}
 
-            error={!!hasError}
-            helperText={errors[name]?.message}
+            render={({
+                field: { onChange, onBlur, value, name, ref },
+                fieldState: { invalid, isTouched, error }
+            }) => (
+                <TextField 
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                    label={label}
+        
+                    error={isTouched && invalid}
+                    helperText={error?.message}
+
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    name={name}
+                    value={value}
+                />
+            )}
         >
         </Controller>
     );

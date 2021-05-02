@@ -51,6 +51,7 @@ function LoginForm(props) {
             identifier: '',
             password: '',
         },
+        reValidateMode: 'onSubmit',
         resolver: yupResolver(schema)
     })
     const handleSubmit = async (values) => {

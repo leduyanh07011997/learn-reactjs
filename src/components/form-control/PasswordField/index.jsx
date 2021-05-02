@@ -19,42 +19,54 @@ PasswordField.propTypes = {
 };
 
 function PasswordField(props) {
-    const {form, name, label, disable} = props;
-    const {errors} = form;
-    const hasError = !!errors[name];
+    const {form, name, label} = props;
+    const {control} = form;
 
     const [showPassword,setShowPassword] = useState(false);
 
     const toggleShowPassword = () => {
-        setShowPassword(x => !x)
+        setShowPassword(!showPassword)
     }
 
     return (
-        <FormControl error={hasError} fullWidth margin="normal" variant="outlined">
-            <InputLabel htmlFor={name}>{label}</InputLabel>
+        <div>
             <Controller
                 name={name}
-                control={form.control}
-                as={OutlinedInput}
-                id={name}
-                type={showPassword ? 'text' : 'password'}
-                label={label}
-                endAdornment={
-                <InputAdornment position="end">
-                    <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
-                    edge="end"
-                    >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                </InputAdornment>
-                }
-                disable={disable}
+                control={control}
+                
+                render={({field: { onChange, onBlur, value, name, ref },
+                    fieldState: { invalid, isTouched, error }
+                }) => (
+                    <>
+                        <FormControl error={isTouched && invalid} fullWidth margin="normal" variant="outlined">
+                            <InputLabel>{label}</InputLabel>
+                            <OutlinedInput
+                                id={name}
+                                error={invalid}
+                                type={showPassword ? 'text' : 'password'}
+                                label={label}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={toggleShowPassword}
+                                        edge="end"
+                                        >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                labelWidth={70}
+                                value={value}
+                                onBlur={onBlur}
+                                onChange={onChange}
+                            />
+                        </FormControl>
+                        <FormHelperText error={invalid}>{error?.message}</FormHelperText>
+                    </>
+                )}  
             />
-            <FormHelperText>{errors[name]?.message}</FormHelperText>
-        </FormControl>
-    );
+        </div>)
 }
 
 export default PasswordField;
