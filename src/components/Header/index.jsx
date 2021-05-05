@@ -1,18 +1,18 @@
-import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Badge, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { AccountCircle, Close } from '@material-ui/icons';
+import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
 import CodeIcon from '@material-ui/icons/Code';
 import Login from 'features/Auth/components/Login';
 import Register from 'features/Auth/components/Register';
 import { logout } from 'features/Auth/userSlice';
+import { cartItemsCountSelector } from 'features/Cart/selectors';
+import MiniCart from 'features/product/components/MiniCart';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
@@ -51,6 +51,7 @@ export default function Header() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
+  const cartItemsCount = useSelector(cartItemsCountSelector)
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClickOpen = () => {
@@ -103,6 +104,15 @@ export default function Header() {
               <AccountCircle />
             </IconButton>
           )}
+          
+          <Box>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={cartItemsCount} color="secondary">
+                <ShoppingCart/>
+              </Badge>
+            </IconButton>
+            <MiniCart />
+          </Box>
         </Toolbar>
       </AppBar>
       <Dialog 

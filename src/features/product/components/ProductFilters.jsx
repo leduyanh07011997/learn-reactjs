@@ -1,6 +1,6 @@
-import React from 'react';
+import { Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Box, Typography } from '@material-ui/core';
+import React from 'react';
 import FilterByCategory from './Filters/FilterByCategory';
 import FilterByPrice from './Filters/FilterByPrice';
 import FilterByService from './Filters/FilterByService';

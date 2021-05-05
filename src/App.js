@@ -6,6 +6,7 @@ import NotFound from './components/NotFound';
 import AlbumFeature from './features/Album';
 import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
+import CartFeature from './features/Cart';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/todos" component={ TodoFeature }></Route>
           <Route path="/albums" component={ AlbumFeature }></Route>
           <Route path="/products" component={ ProductFeature }></Route>
+          <Route path="/cart" component={ CartFeature }></Route>
 
           <Route component={ NotFound }></Route>
         </Switch>

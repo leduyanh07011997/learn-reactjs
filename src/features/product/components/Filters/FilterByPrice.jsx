@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Box, Button, makeStyles, TextField, Typography } from '@material-ui/core';
-import { BorderTop } from '@material-ui/icons';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 FilterByPrice.propTypes = {
     onChange: PropTypes.func,
