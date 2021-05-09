@@ -11,11 +11,12 @@ import CodeIcon from '@material-ui/icons/Code';
 import Login from 'features/Auth/components/Login';
 import Register from 'features/Auth/components/Register';
 import { logout } from 'features/Auth/userSlice';
+import { hideMiniCart } from 'features/Cart/cartSlice';
 import { cartItemsCountSelector } from 'features/Cart/selectors';
 import MiniCart from 'features/product/components/MiniCart';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ const MODE = {
 
 export default function Header() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const loggedInUser = useSelector(state => state.user.current)
   const isLoggedIn = !!loggedInUser.id;
   const classes = useStyles();
@@ -73,6 +75,12 @@ export default function Header() {
   const handleLogoutClick = () => {
     const action = logout()
     dispatch(action)
+  }
+
+  const handleClickToCart = () => {
+    const action = hideMiniCart()
+    dispatch(action)
+    history.push('/cart')
   }
 
   return (
@@ -106,7 +114,7 @@ export default function Header() {
           )}
           
           <Box>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton aria-label="show 4 new mails" color="inherit" onClick={handleClickToCart}>
               <Badge badgeContent={cartItemsCount} color="secondary">
                 <ShoppingCart/>
               </Badge>

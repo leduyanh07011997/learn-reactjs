@@ -1,10 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, makeStyles } from '@material-ui/core';
 import QuantityField from 'components/form-control/QuantityField';
+import { showMiniCart } from 'features/Cart/cartSlice';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import * as yup from "yup";
+
 
 AddToCartForm.propTypes = {
     onSubmit: PropTypes.func,
@@ -19,6 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 function AddToCartForm({onSubmit = null}) {
     const classes = useStyles()
+    const dispatch = useDispatch()
 
     const schema = yup.object().shape({
         quantity: yup.number()
@@ -39,6 +43,11 @@ function AddToCartForm({onSubmit = null}) {
         }
     }
 
+    const handleClickAddToCart = () => {
+        const action = showMiniCart()
+        dispatch(action)
+    }
+
     return (
         <form onSubmit={form.handleSubmit(handleSubmit)}>
             <QuantityField name="quantity" label="Quantity" form={form} />
@@ -50,6 +59,7 @@ function AddToCartForm({onSubmit = null}) {
                 color="primary"
                 fullWidth
                 size="large"
+                onClick={handleClickAddToCart}
             >
                 Add to cart
             </Button>

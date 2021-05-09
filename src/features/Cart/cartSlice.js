@@ -8,11 +8,11 @@ const cartSlice = createSlice({
     },
     reducers: {
         showMiniCart(state) {
-            return state.showMiniCart = true;
+            state.showMiniCart = true
         },
 
         hideMiniCart(state) {
-            return state.showMiniCart = false; 
+            state.showMiniCart = false 
         },
 
         addToCart(state, action) {
