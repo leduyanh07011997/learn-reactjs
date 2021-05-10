@@ -28,7 +28,7 @@ const cartSlice = createSlice({
 
         removeCartItems(state, action) {
             const {idNeedToRemove} = action.payload
-            state.cartItems = state.cartItems.filter(x => x.id === idNeedToRemove)
+            state.cartItems = state.cartItems.filter(x => x.id !== idNeedToRemove)
         },
 
         setQuantity(state, action) {

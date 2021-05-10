@@ -1,11 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, makeStyles } from '@material-ui/core';
 import { STATIC_HOST, THUMBNAIL_PLACEHOLDER } from 'constants/index';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import formatPrice from 'utils/common';
 import { removeCartItems } from './cartSlice';
-import { useRouteMatch } from 'react-router';
-import useProductDetail from 'features/product/hooks/useProductDetail';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -16,7 +14,9 @@ const useStyles = makeStyles(theme => ({
     cartProduct: {
         display: 'flex',
         flexFlow: 'row nowrap',
-        width: '100%'
+        width: '100%',
+        padding: '20px 20px 10px',
+        boxSizing: 'border-box',
     },
 
     cartProductImg: {
@@ -46,7 +46,16 @@ const useStyles = makeStyles(theme => ({
     },
 
     shortDescription: {
-
+        fontSize: '16px',
+        fontWeight: '400',
+        color: 'rgb(119, 119, 119)',
+        lineHeight: '18px',
+        height: '54px',
+        display: 'block',
+        display: '-webkit-box',
+        overflow: 'hidden',
+        "-webkit-box-orient": 'vertical',
+        "-webkit-line-clamp": 3
     },
 
     removeItemBtn: {
@@ -63,12 +72,40 @@ const useStyles = makeStyles(theme => ({
     },
 
     cartProductPrice: {
+        textAlign: 'right',
+        marginRight: '25px'
+    },
 
+    productSalePrice: {
+        margin: 0,
+        fontSize: '16px',
+        fontWeight: '500',
+        display: 'inline-block'
+    },
+
+    productOriginalPrice: {
+        display: 'flex',
+        fontSize: '14px',
+        color: 'rgb(162, 162, 162)',
+        '& > p': {
+            margin: 0,
+            textDecoration: 'line-through',
+        }
+    },
+
+    promotionPercent: {
+        marginLeft: '16px',
+        paddingLeft: '10px',
+        fontWeight: '500',
+        color: 'rgb(36, 36, 36)',
+        borderLeft: '1px solid rgb(36, 36, 36)'
     },
 
     cartProductQuantity: {
 
-    }
+    },
+
+    
 
 }))
 
@@ -79,18 +116,17 @@ function CartInfo(props) {
     const cartItems = useSelector(state => state.cart.cartItems)
     console.log(cartItems);
 
-    const handleRemoveItem = (id) => {
-        // const action = removeCartItems({
-        //     idNeedToRemove
-        // })
-        // dispatch(action)
-        console.log(id)
+    const handleRemoveItem = (idNeedToRemove) => {
+        const action = removeCartItems({
+            idNeedToRemove
+        })
+        dispatch(action)
     }
 
     return (
         <Box className={classes.root}>
             <Grid container>
-                {cartItems.map(item => (
+                {cartItems.length > 0 && cartItems.map(item => (
                     <Grid item key={item.id} className={classes.cartProduct}>
                         <Box component="a">
                             <img
@@ -104,10 +140,18 @@ function CartInfo(props) {
                             <Box className={classes.cartProductInfo}>
                                 <a href={`/products/${item.id}`} className={classes.productName}>{item.product.name}</a>
                                 <p className={classes.shortDescription}>{item.product.shortDescription}</p>
-                                <Button className={classes.removeItemBtn} onClick={handleRemoveItem(item.id)}>Xoá</Button>
+                                <span className={classes.removeItemBtn} onClick={() => handleRemoveItem(item.id)}>Xoá</span>
                             </Box>
                             <Box className={classes.cartProductDetail}>
-                                <Box className={classes.cartProductPrice}>Price</Box>
+                                <Box className={classes.cartProductPrice}>
+                                    <p className={classes.productSalePrice}>{formatPrice(item.product.salePrice)}</p>
+                                    {item.product.promotionPercent > 0 && (
+                                        <p className={classes.productOriginalPrice}>
+                                            <p>{formatPrice(item.product.originalPrice)}</p>
+                                            <span className={classes.promotionPercent}>{`-${item.product.promotionPercent}%`}</span>
+                                        </p>
+                                    )}
+                                </Box>
                                 <Box className={classes.cartProductQuantity}>Quantity</Box>
                             </Box>
                         </Box>
