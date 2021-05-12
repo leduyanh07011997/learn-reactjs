@@ -3,7 +3,7 @@ import { STATIC_HOST, THUMBNAIL_PLACEHOLDER } from 'constants/index';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import formatPrice from 'utils/common';
-import { removeCartItems } from './cartSlice';
+import { deQuantity, inQuantity, removeCartItems, setQuantity } from './cartSlice';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,6 +17,8 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         padding: '20px 20px 10px',
         boxSizing: 'border-box',
+        background: 'rgb(255, 255, 255)',
+        marginBottom: '16px', 
     },
 
     cartProductImg: {
@@ -105,6 +107,32 @@ const useStyles = makeStyles(theme => ({
 
     },
 
+    increase: {
+        padding: '6px 12px',
+        color: 'rgb(153, 153, 153)',
+        display: 'inline-block',
+        cursor: 'pointer',
+        border: '1px solid rgb(200, 200, 200)'
+    },
+
+    qtyInput: {
+        border: 'none',
+        width: '35px',
+        textAlign: 'center',
+        fontSize: '13px',
+        padding: '12px 0 8px',
+        borderBottom: '1px solid rgb(200, 200, 200)',
+        borderTop: '1px solid rgb(200, 200, 200)',
+    },
+
+    decrease: {
+        padding: '6px 12px',
+        color: 'rgb(153, 153, 153)',
+        display: 'inline-block',
+        cursor: 'pointer',
+        border: '1px solid rgb(200, 200, 200)'
+    },
+
     
 
 }))
@@ -114,12 +142,28 @@ function CartInfo(props) {
     const classes = useStyles()
     const dispatch = useDispatch()
     const cartItems = useSelector(state => state.cart.cartItems)
-    console.log(cartItems);
 
     const handleRemoveItem = (idNeedToRemove) => {
         const action = removeCartItems({
             idNeedToRemove
         })
+        dispatch(action)
+    }
+
+    const handleDecreaseQty = (id) => {
+        const action = deQuantity({id})
+        dispatch(action)
+    }
+
+    const handleSetQty = (id,e) => {
+        if(e.target.value > 0) {
+            const action = setQuantity({id, quantity: e.target.value})
+            dispatch(action)
+        }
+    }
+
+    const handleIncreaseQty = (id) => {
+        const action = inQuantity({id})
         dispatch(action)
     }
 
@@ -152,7 +196,15 @@ function CartInfo(props) {
                                         </p>
                                     )}
                                 </Box>
-                                <Box className={classes.cartProductQuantity}>Quantity</Box>
+                                <Box className={classes.cartProductQuantity}>
+                                    <span className={classes.decrease} onClick={() => handleDecreaseQty(item.id)}>-</span>
+                                    <input
+                                        className={classes.qtyInput}
+                                        type="tel"
+                                        value={item.quantity}
+                                        onChange={(e) => handleSetQty(item.id,e)}/>
+                                    <span className={classes.increase} onClick={() => handleIncreaseQty(item.id)}>+</span>
+                                </Box>
                             </Box>
                         </Box>
                     </Grid>

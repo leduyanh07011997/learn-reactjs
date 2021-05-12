@@ -14,10 +14,10 @@ function App() {
     <div className="App">
       <Header/>
         <Switch>
-          <Route path="/" component={ CounterFeature } exact></Route>
-          <Route path="/todos" component={ TodoFeature }></Route>
-          <Route path="/albums" component={ AlbumFeature }></Route>
-          <Route path="/products" component={ ProductFeature }></Route>
+          <Route path="/" component={ ProductFeature } exact></Route>
+          <Route path="/products" component={ ProductFeature } ></Route>
+          {/* <Route path="/todos" component={ TodoFeature }></Route>
+          <Route path="/albums" component={ AlbumFeature }></Route> */}
           <Route path="/cart" component={ CartFeature }></Route>
 
           <Route component={ NotFound }></Route>

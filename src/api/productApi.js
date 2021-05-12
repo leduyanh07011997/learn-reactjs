@@ -2,7 +2,7 @@
 import axiosClient from "./axiosClient";
 
 const productApi = {
-
+    
     async getAll(params) {
         // Transform _page to _start
         const newParams = { ...params };

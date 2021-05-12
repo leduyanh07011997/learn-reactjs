@@ -3,6 +3,7 @@ import { Pagination } from '@material-ui/lab';
 import productApi from 'api/productApi';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import FilterViewer from '../components/Filters/FilterViewer';
 import ProductFilters from '../components/ProductFilters';
@@ -34,6 +35,8 @@ const useStyles = makeStyles(theme => ({
 function ListPage(props) {
     const classes = useStyles()
 
+    const searchProductName = useSelector(state => state.search.productNameNeedToSearch)
+
     const history = useHistory()
     const location = useLocation()
     const queryParams = useMemo(() => {
@@ -60,7 +63,13 @@ function ListPage(props) {
         (async () => {
             try {
                 const { data, pagination } = await productApi.getAll(queryParams)
-                setProductList(data)
+                
+                if(searchProductName) {
+                    setProductList(
+                        data.filter(x => x.name.toLowerCase().includes(searchProductName.toLowerCase())))
+                } else {
+                    setProductList(data)
+                }
                 setPagination(pagination)
             } catch (error) {
                 console.log('Failed to fetch product list: ', error)
@@ -68,7 +77,7 @@ function ListPage(props) {
         })();
         
         setLoading(false)
-    },[queryParams]);
+    },[searchProductName,queryParams]);
 
     const handlePageChange = (e, page) => {
         const filters = {
